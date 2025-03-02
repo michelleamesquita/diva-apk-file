@@ -17,7 +17,8 @@ jobs:
       - name: Clone Android RASP repository
         run: |
           git clone https://github.com/securevale/android-rasp.git
-          mv android-rasp ./app/rasp  # Move o repositório inteiro para dentro do projeto
+          mkdir -p app/rasp  # Cria o diretório se ele não existir
+          mv android-rasp/* app/rasp/  # Move o conteúdo do RASP para dentro de 'app/rasp/'
 
       - name: Inject RASP Code into MainActivity
         run: |

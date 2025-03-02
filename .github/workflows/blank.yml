@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-  # pull_request:
-  #   branches:
-  #     - main
 
 jobs:
   build:
@@ -19,13 +16,13 @@ jobs:
 
       - name: Clone Android RASP repository
         run: |
-          git clone https://github.com/securevale/android-rasp.git rasp
-          mv rasp diva-apk-file/rasp  # Move o módulo para dentro do DIVA
+          git clone https://github.com/securevale/android-rasp.git
+          mv android-rasp ./app/rasp  # Move o repositório inteiro para dentro do projeto
 
       - name: Inject RASP Code into MainActivity
         run: |
-          chmod +x diva-apk-file/inject_rasp.sh
-          ./diva-apk-file/inject_rasp.sh
+          chmod +x ./inject_rasp.sh
+          ./inject_rasp.sh
 
       - name: Set up JDK
         uses: actions/setup-java@v3
@@ -34,14 +31,14 @@ jobs:
           java-version: '17'
 
       - name: Grant execution permissions
-        run: chmod +x ./gradlew
+        run: chmod +x ./app/gradlew
 
       - name: Build APK
-        working-directory: diva-apk-file
+        working-directory: app
         run: ./gradlew assembleDebug
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: DIVA-App
-          path: diva-apk-file/app/build/outputs/apk/debug/app-debug.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
